@@ -5,7 +5,7 @@ pipeline {
     stage('Checkout Code') {
         steps {
             echo 'scm git'
-            git branch: 'main', url: 'https://github.com/adarsh0331/Project_7.git'
+            git branch: 'main', url: 'https://github.com/RakeshKasagani/Project_08_CICD_Argocd_Prometheus_Grafana.git'
         }
     }
     
@@ -46,7 +46,7 @@ pipeline {
 		
      stage('docker image scan'){
      steps{
-         sh "sudo trivy image adarshbarkunta/nodejs:${BUILD_NUMBER}"
+         sh "sudo trivy image rakesh/nodejs:${BUILD_NUMBER}"
      }
  }		
 
@@ -59,7 +59,7 @@ stage('Push image to ECR') {
                   aws ecr get-login-password --region us-east-1 \
                   | sudo docker login --username AWS --password-stdin 526344317172.dkr.ecr.us-east-1.amazonaws.com
                   
-                  sudo docker tag adarshbarkunta/nodejs:${BUILD_NUMBER} 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
+                  sudo docker tag rakesh/nodejs:${BUILD_NUMBER} 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
                   sudo docker push 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
                 '''
             }
@@ -78,8 +78,8 @@ stage('Push image to ECR') {
 				withCredentials([string(credentialsId: 'githubtoken', variable: 'githubtoken')]) 
 				{
                   sh '''
-                    git config user.email "adarsh@gmail.com"
-                    git config user.name "adarsh"
+                    git config user.email "rakesh@gmail.com"
+                    git config user.name "rakesh"
                     BUILD_NUMBER=${BUILD_NUMBER}
                    #sed -i "s/mc:.*/mc:${BUILD_NUMBER}/g" deploymentfiles/deployment.yml
 					sed -i "s|image: .*|image: 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:$BUILD_NUMBER|" deploymentfiles/deployment.yml
