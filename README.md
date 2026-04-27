@@ -103,6 +103,7 @@ aws configure
 Run the following command to start SonarQube using Docker:
 
 ```
+docker pull sonarqube
 sudo docker run -itd --name sonar -p 9000:9000 sonarqube
 ```
 
@@ -115,6 +116,29 @@ sudo docker run -itd --name sonar -p 9000:9000 sonarqube
 3. Login with default credentials: `admin` / `admin`.
 4. Go to **My Account > Security > Generate Tokens**.
 5. Create a token (e.g., name: "Jenkins Token").
+
+## Install Trivy (Security Scanner)
+```
+sudo rpm -ivh https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.56.2_Linux-64bit.rpm
+```
+ ### Verify
+  ```
+trivy --version
+```
+## Install Node.js + npm
+  ### Setup Node.js repo  
+  ```
+curl -sL https://rpm.nodesource.com/setup_18.x | sudo bash -
+```
+ ### Install Node.js
+ ```
+sudo yum install -y nodejs
+```
+ ### Verify
+ ```
+node -v
+npm -v
+```
 
 ### EC2 Instance 2 (t2.xlarge)
 - **Purpose**: Hosts monitoring tools.
