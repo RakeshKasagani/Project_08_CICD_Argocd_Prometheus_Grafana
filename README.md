@@ -354,7 +354,81 @@ stage('Push image to ECR') {
   }
 }
 ```
+# 🧭 Manual Setup Guide – Kubernetes Tool Server (EC2)
+🟢 Step 1: Launch EC2 Instance
+Recommended configuration
+AMI: Amazon Linux 2023 / Amazon Linux 2
+Instance type:
+✔ Recommended: t3.xlarge (or t3.large if cost sensitive)
+Storage: 20–30 GB
+Key pair: create or use existing
+🟢 Step 2: Open Required Ports (Security Group)
 
+No inbound ports are strictly required for tools, but ensure:
+
+Type	Port	Purpose
+SSH	22	Connect to EC2
+🟢 Step 3: Connect to Server
+ssh -i your-key.pem ec2-user@<EC2-PUBLIC-IP>
+🟢 Step 4: Update System
+sudo yum update -y
+🟢 Step 5: Install Basic Dependencies
+sudo yum install -y curl wget git tar unzip
+⚙️ STEP 6: Install AWS CLI (IMPORTANT)
+sudo yum install -y awscli
+
+Verify:
+
+aws --version
+⚙️ STEP 7: Install kubectl
+Download kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+Make executable
+chmod +x kubectl
+Move to system path
+sudo mv kubectl /usr/local/bin/
+Verify
+kubectl version --client
+⚙️ STEP 8: Install eksctl
+Download eksctl
+curl -sSL "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" -o eksctl.tar.gz
+Extract
+tar -xzf eksctl.tar.gz
+Move binary
+sudo mv eksctl /usr/local/bin/
+Clean up
+rm -f eksctl.tar.gz
+Verify
+eksctl version
+⚙️ STEP 9: Install Helm
+Install script method
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+Verify
+helm version
+⚙️ STEP 10: Configure AWS Credentials (IMPORTANT)
+
+You must configure AWS access:
+
+aws configure
+
+Enter:
+
+AWS Access Key
+Secret Key
+Region (e.g. ap-south-1)
+Output format (json)
+⚙️ STEP 11: Add Helm Repositories
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add argo https://argoproj.github.io/argo-helm
+Update repos
+helm repo update
+🟢 Step 12: Verify Everything
+Check tools:
+kubectl version --client
+eksctl version
+helm version
+aws --version
 ## Monitoring
 
 Monitoring ensures observability of the Kubernetes cluster and application.
