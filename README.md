@@ -152,20 +152,33 @@ helm search repo prometheus-community
 
  **Install and Configure Prometheus and Grafana:**
 
-```kubectl create namespace prometheus ```
+```
+kubectl create namespace prometheus
+```
+```
+helm install stable prometheus-community/kube-prometheus-stack -n prometheus 
+```
+```
+kubectl get pods -n prometheus
+ ```
+```
+kubectl get svc -n prometheus
+ ```
 
-```helm install stable prometheus-community/kube-prometheus-stack -n prometheus ```
+```
+kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec": {"type": "LoadBalancer"}}'
+```
+```
+kubectl patch svc stable-grafana -n prometheus -p '{"spec": {"type": "LoadBalancer"}}'
+```
 
-```kubectl get pods -n prometheus ```
-```kubectl get svc -n prometheus ```
+```
+kubectl get secret --namespace prometheus stable-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+``` 
 
-```kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec": {"type": "LoadBalancer"}}' ```
-```kubectl patch svc stable-grafana -n prometheus -p '{"spec": {"type": "LoadBalancer"}}' ```
-
-```kubectl get secret --namespace prometheus stable-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo``` 
-
-```kubectl get svc -n prometheus ```
-
+```
+kubectl get svc -n prometheus
+```
 
 ### AWS ECR
 - **Purpose**: Private Docker registry for storing application images.
