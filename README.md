@@ -29,6 +29,8 @@ The infrastructure is hosted on AWS, with EC2 instances provisioned via Terrafor
   - IAM role: Grants access to AWS ECR for pushing/pulling images.
   - User data script: Installs Jenkins, Docker, SonarQube, Trivy, and Node.js/NPM during instance bootstrap.
 
+# Manual setup Instructions
+
 ## Setup Instructions
 
 ### 1. EC2 Instance Setup
