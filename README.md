@@ -95,6 +95,25 @@ aws configure
 
 - Enter your AWS Access Key ID, Secret Access Key, region (e.g., `us-east-1`), and output format (e.g., `json`).
 
+## SonarQube Setup
+
+### Create SonarQube Container
+Run the following command to start SonarQube using Docker:
+
+```
+sudo docker run -itd --name sonar -p 9000:9000 sonarqube
+```
+
+- Wait for SonarQube to start (check logs: `sudo docker logs sonar`).
+- Access at `http://<EC2-Public-IP>:9000`.
+- Change default password on first login.
+### SonarQube Token
+1. Start SonarQube container .
+2. Access SonarQube at `http://<EC2-Public-IP>:9000`.
+3. Login with default credentials: `admin` / `admin`.
+4. Go to **My Account > Security > Generate Tokens**.
+5. Create a token (e.g., name: "Jenkins Token").
+
 ### EC2 Instance 2 (t2.xlarge)
 - **Purpose**: Hosts monitoring tools.
 - **Tools Installed**:
