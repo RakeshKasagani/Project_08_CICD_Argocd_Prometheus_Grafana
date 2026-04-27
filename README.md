@@ -29,6 +29,72 @@ The infrastructure is hosted on AWS, with EC2 instances provisioned via Terrafor
   - IAM role: Grants access to AWS ECR for pushing/pulling images.
   - User data script: Installs Jenkins, Docker, SonarQube, Trivy, and Node.js/NPM during instance bootstrap.
 
+	## Setup Instructions
+
+### 1. EC2 Instance Setup
+1. Launch an EC2 instance with the above specifications.
+2. SSH into the instance:
+   ```
+   ssh -i <your-key.pem> ec2-user@<EC2-Public-IP>
+   ```
+3. Update the system:
+   ```
+   sudo yum update -y
+   ```
+   ### Install git
+   ```
+   sudo yum install git -y
+   git --version
+   ```
+   ### Install maven
+   ```
+   sudo yum install maven -y
+   mvn --version
+   ```
+
+### 2. Install Jenkins
+Install and configure Jenkins on the EC2 instance:
+
+```
+sudo yum install wget -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade -y
+sudo dnf install java-21-amazon-corretto -y
+sudo yum install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+```
+
+- Access Jenkins at `http://<EC2-Public-IP>:8080`.
+- Unlock Jenkins using the initial admin password from `/var/lib/jenkins/secrets/initialAdminPassword`.
+- Install suggested plugins and create an admin user.
+
+### 3. Install Docker
+Install and configure Docker to work with Jenkins:
+
+```
+sudo yum install docker -y
+sudo systemctl start docker
+sudo usermod -aG docker jenkins
+sudo usermod -aG docker ec2-user
+sudo systemctl restart docker
+sudo chmod 666 /var/run/docker.sock
+```
+
+- Log out and back in as `ec2-user` to apply group changes.
+- Verify: `docker --version`.
+
+### 4. Install and Configure AWS CLI
+Install AWS CLI and configure credentials:
+
+```
+sudo yum install awscli -y
+aws configure
+```
+
+- Enter your AWS Access Key ID, Secret Access Key, region (e.g., `us-east-1`), and output format (e.g., `json`).
+
 ### EC2 Instance 2 (t2.xlarge)
 - **Purpose**: Hosts monitoring tools.
 - **Tools Installed**:
