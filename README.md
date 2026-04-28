@@ -618,10 +618,10 @@ aws configure
 ```
 Enter:
 
-AWS Access Key
-AWS Secret Key
-Region (e.g., us-east-1)
-Output format (json)
+AWS Access Key,
+AWS Secret Key,
+Region (e.g., us-east-1),
+Output format (json).
 
 ## Setup Instructions
 
