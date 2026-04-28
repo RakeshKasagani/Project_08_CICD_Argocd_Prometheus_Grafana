@@ -560,6 +560,68 @@ spec:
 - Revert the `deployment.yaml` commit in GitHub to the previous image tag.
 - ArgoCD auto-syncs, rolling back the deployment.
 - Alternatively, use `kubectl rollout undo deployment/myapp`.
+## verified steps to install the AWS CLI on Windows using PowerShell
+### Step 1: Download AWS CLI Installer
+
+Run this command in PowerShell:
+```
+Invoke-WebRequest -Uri "https://awscli.amazonaws.com/AWSCLIV2.msi" -OutFile "AWSCLIV2.msi"
+```
+This downloads the official installer from Amazon Web Services.
+
+### Step 2: Install AWS CLI
+
+Run:
+```
+Start-Process msiexec.exe -Wait -ArgumentList '/i AWSCLIV2.msi /qn'
+```
+/i → install
+/qn → silent install (no UI)
+
+### Step 3: Verify Installation
+
+Close PowerShell and open a new PowerShell window, then run:
+```
+aws --version
+```
+Expected output (example):
+
+aws-cli/2.x.x Python/3.x Windows/x86_64
+
+If you see this → installation is successful.
+
+### If You Still Get: “aws not recognized”
+
+This is a PATH issue. Fix it like this:
+
+#### Step 1 Check installation path
+
+AWS CLI is usually installed at:
+```
+C:\Program Files\Amazon\AWSCLIV2\
+```
+#### Step 2: Add to PATH
+
+Run in PowerShell:
+```
+$env:Path += ";C:\Program Files\Amazon\AWSCLIV2\"
+```
+Then try again:
+```
+aws --version
+```
+### Step 4: Configure AWS CLI
+
+Once installed, run:
+```
+aws configure
+```
+Enter:
+
+AWS Access Key
+AWS Secret Key
+Region (e.g., us-east-1)
+Output format (json)
 
 ## Setup Instructions
 
