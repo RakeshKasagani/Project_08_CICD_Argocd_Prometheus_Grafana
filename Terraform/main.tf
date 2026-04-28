@@ -4,7 +4,7 @@ provider "aws" {
 
 # Key Pair (use your existing public key)
 resource "aws_key_pair" "mykey" {
-  key_name   = "mykey"
+  key_name   = "project"
   public_key = file("~/.ssh/id_rsa.pub")
 }
 
