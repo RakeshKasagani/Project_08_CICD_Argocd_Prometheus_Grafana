@@ -668,3 +668,86 @@ Output format (json).
 - **Monitoring Gaps**: Ensure Prometheus scrape targets are correct and pods expose metrics.
 
 ---
+
+## If you have any issues with public key path from your local system
+🔍 What’s going wrong
+
+#### Terraform is failing at:
+
+public_key = file("~/.ssh/id_rsa.pub")
+
+Because:
+
+~ (home shortcut) does NOT work in Terraform paths
+Terraform expects a real, absolute or relative file path
+The file likely doesn’t exist at that path on your Windows system
+✅ Step-by-step fix
+✔️ Step 1: Check if the key exists
+
+On Windows PowerShell, run:
+```
+dir $HOME\.ssh\
+```
+Look for:
+
+id_rsa.pub
+✔️ Step 2: If NOT present → generate SSH key
+
+Run:
+```
+ssh-keygen -t rsa -b 4096
+```
+Press Enter for all prompts.
+
+This will create:
+
+C:\Users\Hp\.ssh\id_rsa
+C:\Users\Hp\.ssh\id_rsa.pub
+✔️ Step 3: Update Terraform file (IMPORTANT)
+
+#### Replace this:
+
+public_key = file("~/.ssh/id_rsa.pub")
+
+#### With absolute Windows path:
+
+public_key = file("C:/Users/Hp/.ssh/id_rsa.pub")
+
+⚠️ Notes:
+
+Use forward slashes /, not \
+Terraform does NOT expand ~
+💡 Alternative (better practice)
+
+Instead of hardcoding:
+
+public_key = file("${path.module}/id_rsa.pub")
+
+Then place the key inside your Terraform project folder.
+
+🚨 Why Terraform says this
+
+Terraform’s file() function only reads:
+
+Files inside your project
+Or explicit absolute paths
+
+It does not:
+
+Expand ~
+Search your system automatically
+#### After fixing
+
+Run again:
+```
+terraform init
+terraform plan
+```
+### Verify the change
+
+Run again:
+```
+type main.tf
+```
+
+---
