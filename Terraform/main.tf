@@ -5,7 +5,7 @@ provider "aws" {
 # Key Pair (use your existing public key)
 resource "aws_key_pair" "mykey" {
   key_name   = "project"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("C:/Users/Hp/.ssh/id_ed25519.pub")
 }
 
 # Security Group
