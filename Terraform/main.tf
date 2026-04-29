@@ -76,6 +76,11 @@ resource "aws_instance" "Jenkins_server" {
   key_name      = aws_key_pair.mykey.key_name
   security_groups = [aws_security_group.ec2_sg.name]
 
+  root_block_device {
+  volume_size = 30
+  volume_type = "gp3"
+}
+
   user_data = <<-EOF
               #!/bin/bash
               yum update -y
@@ -146,6 +151,11 @@ resource "aws_instance" "k8s_server" {
   instance_type = "t2.xlarge"
   key_name      = aws_key_pair.mykey.key_name
   security_groups = [aws_security_group.ec2_sg.name]
+
+  root_block_device {
+  volume_size = 30
+  volume_type = "gp3"
+}
 
   user_data = <<-EOF
               #!/bin/bash
