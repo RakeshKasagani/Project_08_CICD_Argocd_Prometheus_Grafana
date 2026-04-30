@@ -623,6 +623,108 @@ AWS Secret Key,
 Region (e.g., us-east-1),
 Output format (json).
 
+# Install Plugins (Step-by-Step in Jenkins UI)
+## Open Plugin Manager
+
+Open Jenkins:
+
+http://<EC2-IP>:8080
+
+Click:
+
+Manage Jenkins → Plugins
+## Install Required Plugins
+#### Go to “Available Plugins” → search and tick: 
+#### Core
+Pipeline Plugin
+Pipeline: Stage View Plugin
+#### Git
+Git Plugin
+GitHub Plugin
+#### SonarQube
+SonarQube Scanner Plugin
+#### Docker
+Docker Pipeline Plugin
+#### AWS
+AWS Credentials Plugin
+Pipeline: AWS Steps Plugin
+#### Credentials
+Credentials Plugin
+Credentials Binding Plugin
+### Install
+
+#### Click:
+
+Install without restart
+
+Then:
+
+##### Manage Jenkins → Restart Jenkins
+### Configure Credentials (VERY IMPORTANT)
+ Go to: Manage Jenkins → Credentials → Global credentials->Add Credentials
+🔹 1. Add AWS Credentials
+Kind: AWS Credentials
+ID: aws-creds
+Access Key: <your access key>
+Secret Key: <your secret key>
+
+#### Add GitHub Token
+
+Click Add Credentials
+
+Kind: Secret Text
+ID: githubtoken
+Secret: <your GitHub PAT token>
+
+#### Add SonarQube Token
+Kind: Secret Text
+ID: sonar-token
+Secret: <token from SonarQube>
+
+### Configure SonarQube in Jenkins
+Manage Jenkins → Configure System
+
+Scroll to SonarQube Servers
+
+ Add SonarQube Server
+
+Click Add SonarQube
+
+Fill:
+
+Name: SonarQube
+
+Server URL:
+
+http://<EC2-IP>:9000
+Authentication Token:
+Click Add → Jenkins
+Select sonar-token
+
+✔ Save
+
+#### Configure Sonar Scanner Tool
+
+
+Manage Jenkins → Tools
+
+Scroll to SonarQube Scanner
+
+Add Scanner:
+Name: SonarScannerCLI
+Tick: Install automatically
+
+✔ Save
+
+#### Configure Docker Permissions (IMPORTANT)
+
+#### On EC2 (not Jenkins UI):
+```
+sudo usermod -aG docker jenkins
+sudo systemctl restart docker
+sudo chmod 666 /var/run/docker.sock
+```
+
 ## Setup Instructions
 
 1. **Provision Infrastructure**:
