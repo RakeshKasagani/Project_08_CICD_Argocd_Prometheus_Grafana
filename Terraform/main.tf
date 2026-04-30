@@ -116,12 +116,22 @@ resource "aws_instance" "Jenkins_server" {
 
 
               # Install SonarQube (with Docker)
- 
+
               echo ">>> Installing SonarQube using Docker..."
-              # Pull and run SonarQube container
-              sudo docker run -d --name sonarqube \
-              -p 9000:9000 \
-              sonarqube:lts
+
+             # Fix required kernel setting
+             sudo sysctl -w vm.max_map_count=262144
+             echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+
+            # Remove old container if exists
+            sudo docker rm -f sonarqube || true
+
+            # Run SonarQube (updated version)
+            sudo docker run -d --name sonarqube \
+            -p 9000:9000 \
+            -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+            --restart always \
+            sonarqube:community
 
               # Install Node.js + npm
 
