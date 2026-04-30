@@ -1,6 +1,62 @@
 provider "aws" {
   region = "us-east-1"
 }
+# ----------------------------
+# VPC
+# ----------------------------
+resource "aws_vpc" "main_vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "main-vpc"
+  }
+}
+
+# ----------------------------
+# Internet Gateway
+# ----------------------------
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main_vpc.id
+}
+
+# ----------------------------
+# Subnets
+# ----------------------------
+resource "aws_subnet" "subnet1" {
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "subnet2" {
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+}
+
+# ----------------------------
+# Route Table
+# ----------------------------
+resource "aws_route_table" "rt" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+}
+
+resource "aws_route_table_association" "a1" {
+  subnet_id      = aws_subnet.subnet1.id
+  route_table_id = aws_route_table.rt.id
+}
+
+resource "aws_route_table_association" "a2" {
+  subnet_id      = aws_subnet.subnet2.id
+  route_table_id = aws_route_table.rt.id
+}
 
 # Key Pair (use your existing public key)
 resource "aws_key_pair" "mykey" {
@@ -74,7 +130,10 @@ resource "aws_instance" "Jenkins_server" {
   ami           = "ami-08982f1c5bf93d976" # Amazon Linux 2 (us-east-1)
   instance_type = "t2.large"
   key_name      = aws_key_pair.mykey.key_name
-  security_groups = [aws_security_group.ec2_sg.name]
+  subnet_id     = aws_subnet.subnet1.id
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+
+  associate_public_ip_address = true
 
   root_block_device {
   volume_size = 30
@@ -160,7 +219,10 @@ resource "aws_instance" "k8s_server" {
   ami           = "ami-08982f1c5bf93d976"
   instance_type = "t2.xlarge"
   key_name      = aws_key_pair.mykey.key_name
-  security_groups = [aws_security_group.ec2_sg.name]
+  subnet_id     = aws_subnet.subnet2.id
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+
+  associate_public_ip_address = true
 
   root_block_device {
   volume_size = 30
