@@ -81,7 +81,7 @@ resource "aws_route_table_association" "a2" {
 # Key Pair
 # ----------------------------
 resource "aws_key_pair" "mykey" {
-  key_name   = "project"
+  key_name   = "project-new"
   public_key = file("C:/Users/Hp/.ssh/id_ed25519.pub")
 }
 
