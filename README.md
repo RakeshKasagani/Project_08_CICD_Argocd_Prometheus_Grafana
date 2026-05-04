@@ -654,7 +654,7 @@ Add credentials in **Manage Jenkins > Manage Credentials > System > Global crede
 
 - **SonarQube Token**:
   - **Kind**: Secret text
-  - **Secret**: SonarQube token from step 7
+  - **Secret**: SonarQube token 
   - **ID**: `sonar-token`
   - **Description**: SonarQube authentication token
 
