@@ -699,24 +699,30 @@ sudo chmod 666 /var/run/docker.sock
    - Configure AWS credentials (`aws configure`).
    - Run `terraform init`, `terraform plan`, and `terraform apply`.
 2. **Create Kubernetes Cluster**:
-   - Use `eksctl create cluster --name my-cluster --region <region> --nodegroup-name workers --node-type t3.medium --nodes 3`.
-   - Install ArgoCD: `kubectl create namespace argocd && kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`.
-3. **Configure Jenkins**:
+   - Use
+     ```
+    eksctl create cluster --name my-cluster --region <region> --nodegroup-name workers --node-type t3.medium --nodes 3
+    ```
+   - Install ArgoCD:
+    ```
+    kubectl create namespace argocd && kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+   ```
+4. **Configure Jenkins**:
    - Access Jenkins at `http://<ec2-1-ip>:8080`.
    - Install plugins: Git, Pipeline, SonarQube Scanner, Docker, AWS Credentials.
    - Configure GitHub webhook and credentials.
    - Add SonarQube server in Jenkins global config.
-4. **Set Up Monitoring**:
+5. **Set Up Monitoring**:
    - SSH into EC2 Instance 2 and install Helm.
    - Deploy Prometheus and Grafana via Helm commands (see Monitoring section).
    - Configure Grafana with Prometheus data source.
-5. **Create GitHub Repository**:
+6. **Create GitHub Repository**:
    - Add source code, `Dockerfile`, `Jenkinsfile`, and Kubernetes manifests.
    - Configure webhook to point to Jenkins.
-6. **Create ECR Repository**:
+7. **Create ECR Repository**:
    - Run `aws ecr create-repository --repository-name myapp`.
    - Assign IAM roles to EC2 Instance 1 and Kubernetes nodes.
-7. **Run Pipeline**:
+8. **Run Pipeline**:
    - Commit code to GitHub to trigger Jenkins.
    - Monitor pipeline in Jenkins UI, ArgoCD UI, and Grafana dashboards.
 
