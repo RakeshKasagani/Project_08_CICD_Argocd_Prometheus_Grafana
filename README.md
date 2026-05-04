@@ -673,7 +673,7 @@ Add credentials in **Manage Jenkins > Manage Credentials > System > Global crede
    - **Credentials**: Select `sonar-token`.
 3. Go to **Manage Jenkins > Tools > SonarQube Scanner**.
 4. Add:
-   - **Name**: `SonarScanner`
+   - **Name**: `SonarScannerCLI`
    - **Install automatically**: Check or specify path.
 5. Save.
 6. Go to **Manage Jenkins > Tools > maven**.
