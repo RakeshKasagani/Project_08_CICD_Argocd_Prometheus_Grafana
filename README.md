@@ -652,13 +652,13 @@ Add credentials in **Manage Jenkins > Manage Credentials > System > Global crede
     - **ID**: `githubtoken`
     - **Description**: GitHub access token
 
-- **SonarQube Token**:
+  **SonarQube Token**:
   - **Kind**: Secret text
   - **Secret**: SonarQube token 
   - **ID**: `sonar-token`
   - **Description**: SonarQube authentication token
 
-	- **Docker Hub Credentials**:
+ **Docker Hub Credentials**:
   - **Kind**: Username with password
   - **Username**: Your Docker Hub username
   - **Password**: Your Docker Hub password
