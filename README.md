@@ -643,7 +643,7 @@ Add credentials in **Manage Jenkins > Manage Credentials > System > Global crede
  - **Access Key**: <your access key>
  - **Secret Key**: <your secret key>
 
- - **GitHub Token**:
+  **GitHub Token**:
   - Go to **GitHub > Settings > Developer settings > Personal access tokens**.
   - Generate a token with `repo` and `admin:repo_hook` scopes.
   - In Jenkins:
