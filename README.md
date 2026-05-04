@@ -624,97 +624,64 @@ Region (e.g., us-east-1),
 Output format (json).
 
 # Install Plugins (Step-by-Step in Jenkins UI)
-## Open Plugin Manager
+Install necessary plugins via **Manage Jenkins > Manage Plugins > Available**:
+- **Core: Pipeline Plugin,Pipeline: Stage View Plugin**
+- **Git:Git Plugin, GitHub Plugin**
+- **SonarQube Scanner**
+- **Docker Pipeline Plugin**
+- **Maven Integration**
+- **AWS: AWS Credentials Plugin, Pipeline: AWS Steps Plugin**
+- **Credentials: Credentials Plugin, Credentials Binding Plugin**
+ 
+- **Manage Jenkins → Restart Jenkins**
+  
+###  Configure Credentials in Jenkins
+Add credentials in **Manage Jenkins > Manage Credentials > System > Global credentials**:
+**AWS Credentials**
+ - **Kind**: Secret text
+ - **ID**: aws-creds
+ - **Access Key**: <your access key>
+ - **Secret Key**: <your secret key>
 
-Open Jenkins:
+ - **GitHub Token**:
+  - Go to **GitHub > Settings > Developer settings > Personal access tokens**.
+  - Generate a token with `repo` and `admin:repo_hook` scopes.
+  - In Jenkins:
+    - **Kind**: Secret text
+    - **Secret**: GitHub token
+    - **ID**: `githubtoken`
+    - **Description**: GitHub access token
 
-http://<EC2-IP>:8080
+- **SonarQube Token**:
+  - **Kind**: Secret text
+  - **Secret**: SonarQube token from step 7
+  - **ID**: `sonar-token`
+  - **Description**: SonarQube authentication token
 
-Click:
+	- **Docker Hub Credentials**:
+  - **Kind**: Username with password
+  - **Username**: Your Docker Hub username
+  - **Password**: Your Docker Hub password
+  - **ID**: `dockerhub`
+  - **Description**: Docker Hub credentials
 
-Manage Jenkins → Plugins
-## Install Required Plugins
-#### Go to “Available Plugins” → search and tick: 
-#### Core
-Pipeline Plugin
-Pipeline: Stage View Plugin
-#### Git
-Git Plugin
-GitHub Plugin
-#### SonarQube
-SonarQube Scanner Plugin
-#### Docker
-Docker Pipeline Plugin
-#### AWS
-AWS Credentials Plugin
-Pipeline: AWS Steps Plugin
-#### Credentials
-Credentials Plugin
-Credentials Binding Plugin
-### Install
+###  Configure SonarQube in Jenkins
+1. Go to **Manage Jenkins > System Configuration > SonarQube Servers**.
+2. Add:
+   - **Name**: `SonarQube`
+   - **Server URL**: `http://<EC2-Public-IP>:9000`
+   - **Credentials**: Select `sonar-token`.
+3. Go to **Manage Jenkins > Tools > SonarQube Scanner**.
+4. Add:
+   - **Name**: `SonarScanner`
+   - **Install automatically**: Check or specify path.
+5. Save.
+6. Go to **Manage Jenkins > Tools > maven**.
+ 7. Add:
+   - **Name**: `maven`
+   - **Install automatically**: Check or specify path.
+8. Save.
 
-#### Click:
-
-Install without restart
-
-Then:
-
-##### Manage Jenkins → Restart Jenkins
-### Configure Credentials (VERY IMPORTANT)
- Go to: Manage Jenkins → Credentials → Global credentials->Add Credentials
-🔹 1. Add AWS Credentials
-Kind: AWS Credentials
-ID: aws-creds
-Access Key: <your access key>
-Secret Key: <your secret key>
-
-#### Add GitHub Token
-
-Click Add Credentials
-
-Kind: Secret Text
-ID: githubtoken
-Secret: <your GitHub PAT token>
-
-#### Add SonarQube Token
-Kind: Secret Text
-ID: sonar-token
-Secret: <token from SonarQube>
-
-### Configure SonarQube in Jenkins
-Manage Jenkins → Configure System
-
-Scroll to SonarQube Servers
-
- Add SonarQube Server
-
-Click Add SonarQube
-
-Fill:
-
-Name: SonarQube
-
-Server URL:
-
-http://<EC2-IP>:9000
-Authentication Token:
-Click Add → Jenkins
-Select sonar-token
-
-✔ Save
-
-#### Configure Sonar Scanner Tool
-
-
-Manage Jenkins → Tools
-
-Scroll to SonarQube Scanner
-
-Add Scanner:
-Name: SonarScannerCLI
-Tick: Install automatically
-
-✔ Save
 
 #### Configure Docker Permissions (IMPORTANT)
 
