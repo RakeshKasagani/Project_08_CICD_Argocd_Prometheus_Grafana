@@ -766,6 +766,10 @@ sudo chmod 666 /var/run/docker.sock
     eksctl create cluster --name my-cluster --region us-east-1 --nodegroup-name workers --node-type t3.medium --nodes 3
     ```
      - **Install ArgoCD:**
+       - IF not configured kubeconfig after cluster creation. Then run this command
+       ```
+       aws eks update-kubeconfig --region us-east-1 --name my-cluster
+       ```
     ```
     kubectl create namespace argocd && kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
    ```
