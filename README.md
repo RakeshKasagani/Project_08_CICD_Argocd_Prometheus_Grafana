@@ -726,6 +726,7 @@ sudo chmod 666 /var/run/docker.sock
        - AmazonEKSWorkerNodePolicy
        - AmazonEC2ContainerRegistryReadOnly
        - AmazonEKS_CNI_Policy
+       - AmazonEKSServicePolicy
    - If role doesn’t exist:
         - Create IAM Role
         - Select EC2 as trusted entity
