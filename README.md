@@ -647,7 +647,7 @@ Install necessary plugins via **Manage Jenkins > Manage Plugins > Available**:
 - **Docker Pipeline Plugin**
 - **Maven Integration**
 - **AWS: AWS Credentials Plugin, Pipeline: AWS Steps Plugin**
-- **Credentials: Credentials Plugin, Credentials Binding Plugin(Check if they are already installed
+- **Credentials: Credentials Plugin, Credentials Binding Plugin (Check if they are already installed
 Go to:
 Manage Jenkins → Plugins → Installed
 Search:
@@ -655,7 +655,7 @@ Search:
   -binding
 👉 If you see:
 Credentials Plugin ✔
-Credentials Binding Plugin ✔**
+Credentials Binding Plugin ✔**)
  
 - **Manage Jenkins → Restart Jenkins**
   
