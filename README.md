@@ -736,7 +736,7 @@ sudo chmod 666 /var/run/docker.sock
   - Attach an inline policy directly to your role:
         - IAM → Roles → jenkinsk8s → Add inline policy
      - Paste this:
-       ```{
+       json</b> {
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -747,7 +747,7 @@ sudo chmod 666 /var/run/docker.sock
       "Resource": "*"
     }
   ]
-}```
+} <b> 
 
 ## Setup Instructions
 
