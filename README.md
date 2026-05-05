@@ -715,7 +715,7 @@ sudo chmod 666 /var/run/docker.sock
    - Configure AWS credentials (`aws configure`).
    - Run `terraform init`, `terraform plan`, and `terraform apply`.
 2. **Create Kubernetes Cluster**:
-       ****Use***
+      - **Use**
      ```
     eksctl create cluster --name my-cluster --region <region> --nodegroup-name workers --node-type t3.medium --nodes 3
     ```
