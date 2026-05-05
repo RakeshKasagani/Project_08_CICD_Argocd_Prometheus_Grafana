@@ -728,6 +728,7 @@ sudo chmod 666 /var/run/docker.sock
        - AmazonEKS_CNI_Policy
        - AmazonEKSServicePolicy
        - AmazonEC2FullAccess
+       - AWSCloudFormationFullAccess
    - If role doesn’t exist:
         - Create IAM Role : jenkinsk8s
         - Select EC2 as trusted entity
