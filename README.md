@@ -661,8 +661,9 @@ Credentials Binding Plugin ✔**)
   
 ###  Configure Credentials in Jenkins
 Add credentials in **Manage Jenkins > Manage Credentials > System > Global credentials**:
+
 **AWS Credentials**
- - **Kind**: Secret text
+ - **Kind**: AWS Credentials
  - **ID**: aws-creds
  - **Access Key**: <your access key>
  - **Secret Key**: <your secret key>
