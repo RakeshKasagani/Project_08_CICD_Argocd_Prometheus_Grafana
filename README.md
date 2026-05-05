@@ -560,8 +560,9 @@ spec:
 - Revert the `deployment.yaml` commit in GitHub to the previous image tag.
 - ArgoCD auto-syncs, rolling back the deployment.
 - Alternatively, use `kubectl rollout undo deployment/myapp`.
+  
 ## verified steps to install the AWS CLI on Windows using PowerShell
-### Step 1: Download AWS CLI Installer
+ ### Step 1: Download AWS CLI Installer
 
 Run this command in PowerShell:
 ```
@@ -622,7 +623,22 @@ AWS Access Key,
 AWS Secret Key,
 Region (e.g., us-east-1),
 Output format (json).
-
+### To verify changes in terrform file in windows powershell
+```
+type main.tf     
+```
+  ##### or
+  ```
+  Get-Content main.tf
+  ```
+### To edit a terrform file in windows powershell 
+```
+notepad main.tf
+```
+   ##### or
+```
+code main.tf
+```
 # Install Plugins (Step-by-Step in Jenkins UI)
 Install necessary plugins via **Manage Jenkins > Manage Plugins > Available**:
 - **Core: Pipeline Plugin,Pipeline: Stage View Plugin**
