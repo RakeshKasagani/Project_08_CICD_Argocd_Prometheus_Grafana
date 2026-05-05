@@ -729,6 +729,7 @@ sudo chmod 666 /var/run/docker.sock
    - If role doesn’t exist:
         - Create IAM Role
         - Select EC2 as trusted entity
+        - Service or use case: EC2
         -  Attach above policies
 ## Setup Instructions
 
