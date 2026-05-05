@@ -716,7 +716,20 @@ sudo usermod -aG docker jenkins
 sudo systemctl restart docker
 sudo chmod 666 /var/run/docker.sock
 ```
-
+### Attach IAM Role to EC2(k8s)
+  - Step-by-step:
+  - Open EC2 → Instances
+  - Select your instance
+  - Click Actions → Security → Modify IAM Role
+  - Attach a role with permissions:
+       - AmazonEKSClusterPolicy
+       - AmazonEKSWorkerNodePolicy
+       - AmazonEC2ContainerRegistryReadOnly
+       - AmazonEKS_CNI_Policy
+   - If role doesn’t exist:
+        - Create IAM Role
+        - Select EC2 as trusted entity
+        -  Attach above policies
 ## Setup Instructions
 
 1. **Provision Infrastructure**:
@@ -726,7 +739,7 @@ sudo chmod 666 /var/run/docker.sock
 2. **Create Kubernetes Cluster**:
       - **Use**
      ```
-    eksctl create cluster --name my-cluster --region <region> --nodegroup-name workers --node-type t3.medium --nodes 3
+    eksctl create cluster --name my-cluster --region us-east-1 --nodegroup-name workers --node-type t3.medium --nodes 3
     ```
      - **Install ArgoCD:**
     ```
