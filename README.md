@@ -623,7 +623,7 @@ AWS Access Key,
 AWS Secret Key,
 Region (e.g., us-east-1),
 Output format (json).
-### To verify changes in terrform file in windows powershell
+### To view terrform file in windows powershell
 ```
 type main.tf     
 ```
