@@ -727,11 +727,29 @@ sudo chmod 666 /var/run/docker.sock
        - AmazonEC2ContainerRegistryReadOnly
        - AmazonEKS_CNI_Policy
        - AmazonEKSServicePolicy
+       - AmazonEC2FullAccess
    - If role doesn’t exist:
-        - Create IAM Role
+        - Create IAM Role : jenkinsk8s
         - Select EC2 as trusted entity
         - Service or use case: EC2
         -  Attach above policies
+  - Attach an inline policy directly to your role:
+        - IAM → Roles → jenkinsk8s → Add inline policy
+    Paste this:
+    ```
+    {
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "eks:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
 ## Setup Instructions
 
 1. **Provision Infrastructure**:
