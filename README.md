@@ -642,7 +642,7 @@ code main.tf
 # Install Plugins (Step-by-Step in Jenkins UI)
 Install necessary plugins via **Manage Jenkins > Manage Plugins > Available**:
 - **Core: Pipeline Plugin,Pipeline: Stage View Plugin**
-- **Git:Git Plugin, GitHub Plugin**
+- **Git:Git Plugin, GitHub Plugin,GitHub Integration,GitHub Authentication**
 - **SonarQube Scanner**
 - **Docker Pipeline Plugin**
 - **Maven Integration**
