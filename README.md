@@ -762,12 +762,12 @@ sudo chmod 666 /var/run/docker.sock
    - Run `terraform init`, `terraform plan`, and `terraform apply`.
 2. **Create Kubernetes Cluster**:
       - **Use**
+   
         - IF not configured kubeconfig after cluster creation. Then run this command
        ```
        aws eks update-kubeconfig --region us-east-1 --name my-cluster
        ```
-        
-     ```
+      ```
     eksctl create cluster --name my-cluster --region us-east-1 --nodegroup-name workers --node-type t3.medium --nodes 3
     ```
      - **Install ArgoCD:**
