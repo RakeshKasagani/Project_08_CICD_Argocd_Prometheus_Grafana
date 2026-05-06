@@ -766,9 +766,11 @@ sudo chmod 666 /var/run/docker.sock
        ```
        aws eks update-kubeconfig --region us-east-1 --name my-cluster
        ```
-      ```
+       
+    ```
     eksctl create cluster --name my-cluster --region us-east-1 --nodegroup-name workers --node-type t3.medium --nodes 3
     ```
+    
      - **Install ArgoCD:**
       
     ```
