@@ -57,10 +57,10 @@ stage('Push image to ECR') {
             script {
                 sh '''
                   aws ecr get-login-password --region us-east-1 \
-                  | docker login --username AWS --password-stdin 526344317172.dkr.ecr.us-east-1.amazonaws.com
+                  | docker login --username AWS --password-stdin 436735645837.dkr.ecr.us-east-1.amazonaws.com
                   
-                   docker tag rakesh/nodejs:${BUILD_NUMBER} 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
-                   docker push 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
+                   docker tag rakesh/nodejs:${BUILD_NUMBER} 436735645837.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
+                   docker push 436735645837.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
                 '''
             }
         }
