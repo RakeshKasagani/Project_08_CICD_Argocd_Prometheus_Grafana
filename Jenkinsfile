@@ -19,8 +19,8 @@ pipeline {
                           ${scannerHome}/bin/sonar-scanner \
                           -Dsonar.projectKey=my-devops-app \
                           -Dsonar.sources=. \
-                          -Dsonar.host.url=http://54.167.98.78:9000/ \
-                          -Dsonar.login=squ_1d768aa35185eaddb20ecdfbe32f0740c673b5f6
+                          -Dsonar.host.url=http://54.236.59.28:9000/ \
+                          -Dsonar.login=sqa_443edc75e594704c7ad443d074ab37238c15d477
                        """
                     }
                 }
@@ -39,7 +39,7 @@ pipeline {
     steps{
         script{
             echo 'docker image build'
-        sh 'sudo docker build -t adarshbarkunta/nodejs:${BUILD_NUMBER} .'
+        sh 'sudo docker build -t rakesh/nodejs:${BUILD_NUMBER} .'
         }
     }
 }
@@ -70,7 +70,7 @@ stage('Push image to ECR') {
 		
 		 environment {
             GIT_REPO_NAME = "Project_7"
-            GIT_USER_NAME = "adarsh0331"
+            GIT_USER_NAME = "rakesh"
         }
 		
             steps {
