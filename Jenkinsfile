@@ -39,7 +39,7 @@ pipeline {
     steps{
         script{
             echo 'docker image build'
-        sh 'sudo docker build -t rakesh/nodejs:${BUILD_NUMBER} .'
+        sh 'docker build -t rakesh/nodejs:${BUILD_NUMBER} .'
         }
     }
 }
