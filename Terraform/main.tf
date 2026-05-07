@@ -141,6 +141,22 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Grafana"
+    from_port   = 3001
+    to_port     = 3001
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "ArgoCD"
+    from_port   = 8081
+    to_port     = 8081
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -153,10 +169,10 @@ resource "aws_security_group" "ec2_sg" {
 # Instance 1: Jenkins Server
 # ----------------------------
 resource "aws_instance" "jenkins_server" {
-  ami           = "ami-08982f1c5bf93d976"
-  instance_type = "t2.large"
-  key_name      = aws_key_pair.mykey.key_name
-  subnet_id     = aws_subnet.subnet1.id
+  ami                    = "ami-08982f1c5bf93d976"
+  instance_type          = "t2.large"
+  key_name               = aws_key_pair.mykey.key_name
+  subnet_id              = aws_subnet.subnet1.id
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
 
   associate_public_ip_address = true
@@ -168,35 +184,61 @@ resource "aws_instance" "jenkins_server" {
 
   user_data = <<-EOF
               #!/bin/bash
-              yum update -y
-              yum install -y git docker
 
+              yum update -y
+
+              # Install packages
+              yum install -y git docker wget curl tar
+
+              # Start Docker
               systemctl start docker
               systemctl enable docker
+
+              # Docker permissions
               usermod -aG docker ec2-user
 
-              # Jenkins
+              # Jenkins Installation
               wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
               rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
               yum install -y java-21-amazon-corretto jenkins
+
               systemctl enable jenkins
               systemctl start jenkins
 
-              # Trivy
-              rpm -ivh https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.56.2_Linux-64bit.rpm
+              # Add Jenkins user to Docker group
+              usermod -aG docker jenkins
 
-              # SonarQube
+              # Install NodeJS
+              curl -sL https://rpm.nodesource.com/setup_18.x | bash -
+              yum install -y nodejs
+
+              # Install Trivy
+              wget https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-64bit.tar.gz
+
+              tar -xzf trivy_0.70.0_Linux-64bit.tar.gz
+
+              mv trivy /usr/local/bin/
+
+              chmod +x /usr/local/bin/trivy
+
+              # Verify Trivy
+              trivy --version
+
+              # SonarQube Requirements
               sysctl -w vm.max_map_count=262144
               echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
-              docker run -d --name sonarqube \
+              # Run SonarQube Container
+              docker run -d \
+              --name sonarqube \
               -p 9000:9000 \
               -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
-              --restart always sonarqube:community
+              --restart always \
+              sonarqube:community
 
-              # Node
-              curl -sL https://rpm.nodesource.com/setup_18.x | bash -
-              yum install -y nodejs
+              # Restart Jenkins
+              systemctl restart jenkins
               EOF
 
   tags = {
@@ -208,10 +250,10 @@ resource "aws_instance" "jenkins_server" {
 # Instance 2: K8s Server
 # ----------------------------
 resource "aws_instance" "k8s_server" {
-  ami           = "ami-08982f1c5bf93d976"
-  instance_type = "t2.xlarge"
-  key_name      = aws_key_pair.mykey.key_name
-  subnet_id     = aws_subnet.subnet2.id
+  ami                    = "ami-08982f1c5bf93d976"
+  instance_type          = "t2.xlarge"
+  key_name               = aws_key_pair.mykey.key_name
+  subnet_id              = aws_subnet.subnet2.id
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
 
   associate_public_ip_address = true
@@ -223,25 +265,42 @@ resource "aws_instance" "k8s_server" {
 
   user_data = <<-EOF
               #!/bin/bash
+
               yum update -y
-              yum install -y curl wget git tar
+
+              yum install -y curl wget git tar unzip
 
               # kubectl
               curl -LO "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
               chmod +x kubectl
+
               mv kubectl /usr/local/bin/
 
               # eksctl
-              curl -sSL https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz -o eksctl.tar.gz
+              curl -sSL "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" -o eksctl.tar.gz
+
               tar -xzf eksctl.tar.gz
+
               mv eksctl /usr/local/bin/
 
-              # helm
+              # AWS CLI v2
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+              unzip awscliv2.zip
+
+              ./aws/install
+
+              # Helm
               curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
+              # Helm Repositories
               helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
               helm repo add grafana https://grafana.github.io/helm-charts
+
               helm repo add argo https://argoproj.github.io/argo-helm
+
               helm repo update
               EOF
 
