@@ -46,7 +46,7 @@ pipeline {
 		
      stage('docker image scan'){
      steps{
-         sh "sudo trivy image rakesh/nodejs:${BUILD_NUMBER}"
+         sh "trivy image rakesh/nodejs:${BUILD_NUMBER}"
      }
  }		
 
