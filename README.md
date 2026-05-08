@@ -734,6 +734,11 @@ sudo systemctl restart jenkins
        - AmazonEC2FullAccess
        - CloudFormationFullAccess
        - IAMFullAccess
+     - If role doesn’t exist:
+        - Create IAM Role : jenkins
+        - Select EC2 as trusted entity
+        - Service or use case: EC2
+        -  Attach above policies
 ### Create from AWS Console (jenkins)
    ##### Go to: AWS Console → Elastic Container Registry (ECR) → Repositories → Create repository
    ##### Repository name: nodejs
