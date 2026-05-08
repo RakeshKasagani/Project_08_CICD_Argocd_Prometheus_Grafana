@@ -734,7 +734,7 @@ sudo systemctl restart jenkins
        - AmazonEC2FullAccess
        - CloudFormationFullAccess
        - IAMFullAccess
-     - If role doesn’t exist:
+ - If role doesn’t exist:
         - Create IAM Role : jenkins
         - Select EC2 as trusted entity
         - Service or use case: EC2
