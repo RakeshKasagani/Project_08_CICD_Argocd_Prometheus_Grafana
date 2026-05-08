@@ -82,6 +82,7 @@ sudo usermod -aG docker jenkins
 sudo usermod -aG docker ec2-user
 sudo systemctl restart docker
 sudo chmod 666 /var/run/docker.sock
+sudo systemctl restart jenkins
 ```
 
 - Log out and back in as `ec2-user` to apply group changes.
