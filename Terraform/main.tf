@@ -141,27 +141,15 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "Grafana"
-    from_port   = 3001
-    to_port     = 3001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "ArgoCD"
-    from_port   = 8081
-    to_port     = 8081
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "devops-sg"
   }
 }
 
@@ -169,12 +157,11 @@ resource "aws_security_group" "ec2_sg" {
 # Instance 1: Jenkins Server
 # ----------------------------
 resource "aws_instance" "jenkins_server" {
-  ami                    = "ami-08982f1c5bf93d976"
-  instance_type          = "t2.large"
-  key_name               = aws_key_pair.mykey.key_name
-  subnet_id              = aws_subnet.subnet1.id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-
+  ami                         = "ami-08982f1c5bf93d976"
+  instance_type               = "t2.large"
+  key_name                    = aws_key_pair.mykey.key_name
+  subnet_id                   = aws_subnet.subnet1.id
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
 
   root_block_device {
@@ -186,19 +173,18 @@ resource "aws_instance" "jenkins_server" {
               #!/bin/bash
 
               yum update -y
-
-              # Install packages
-              yum install -y git docker wget curl tar
+              yum install -y git docker wget curl unzip tar
 
               # Start Docker
               systemctl start docker
               systemctl enable docker
 
-              # Docker permissions
+              # Add users to Docker group
               usermod -aG docker ec2-user
 
               # Jenkins Installation
               wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
               rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 
               yum install -y java-21-amazon-corretto jenkins
@@ -206,11 +192,13 @@ resource "aws_instance" "jenkins_server" {
               systemctl enable jenkins
               systemctl start jenkins
 
-              # Add Jenkins user to Docker group
+              # Allow Jenkins to use Docker
               usermod -aG docker jenkins
+              systemctl restart jenkins
 
               # Install NodeJS
-              curl -sL https://rpm.nodesource.com/setup_18.x | bash -
+              curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
+
               yum install -y nodejs
 
               # Install Trivy
@@ -222,23 +210,17 @@ resource "aws_instance" "jenkins_server" {
 
               chmod +x /usr/local/bin/trivy
 
-              # Verify Trivy
-              trivy --version
-
               # SonarQube Requirements
               sysctl -w vm.max_map_count=262144
+
               echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
               # Run SonarQube Container
-              docker run -d \
-              --name sonarqube \
-              -p 9000:9000 \
-              -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
-              --restart always \
-              sonarqube:community
-
-              # Restart Jenkins
-              systemctl restart jenkins
+              docker run -d --name sonarqube \
+                -p 9000:9000 \
+                -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+                --restart always \
+                sonarqube:lts-community
               EOF
 
   tags = {
@@ -250,12 +232,11 @@ resource "aws_instance" "jenkins_server" {
 # Instance 2: K8s Server
 # ----------------------------
 resource "aws_instance" "k8s_server" {
-  ami                    = "ami-08982f1c5bf93d976"
-  instance_type          = "t2.xlarge"
-  key_name               = aws_key_pair.mykey.key_name
-  subnet_id              = aws_subnet.subnet2.id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-
+  ami                         = "ami-08982f1c5bf93d976"
+  instance_type               = "t2.xlarge"
+  key_name                    = aws_key_pair.mykey.key_name
+  subnet_id                   = aws_subnet.subnet2.id
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
 
   root_block_device {
@@ -268,33 +249,31 @@ resource "aws_instance" "k8s_server" {
 
               yum update -y
 
-              yum install -y curl wget git tar unzip
+              yum install -y curl wget git tar unzip docker
 
-              # kubectl
+              systemctl start docker
+              systemctl enable docker
+
+              usermod -aG docker ec2-user
+
+              # Install kubectl
               curl -LO "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 
               chmod +x kubectl
 
               mv kubectl /usr/local/bin/
 
-              # eksctl
-              curl -sSL "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" -o eksctl.tar.gz
+              # Install eksctl
+              curl -sSL https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz -o eksctl.tar.gz
 
               tar -xzf eksctl.tar.gz
 
               mv eksctl /usr/local/bin/
 
-              # AWS CLI v2
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-
-              unzip awscliv2.zip
-
-              ./aws/install
-
-              # Helm
+              # Install Helm
               curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-              # Helm Repositories
+              # Add Helm Repositories
               helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
               helm repo add grafana https://grafana.github.io/helm-charts
