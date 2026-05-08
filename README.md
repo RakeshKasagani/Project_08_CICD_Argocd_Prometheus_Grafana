@@ -735,10 +735,9 @@ sudo systemctl restart jenkins
        - CloudFormationFullAccess
        - IAMFullAccess
 ### Create from AWS Console (jenkins)
-   #### Go to:
-           - AWS Console → Elastic Container Registry (ECR) → Repositories → Create repository
-   #### Repository name: nodejs
-   #### Keep everything default and click: Create repository
+   ##### Go to: AWS Console → Elastic Container Registry (ECR) → Repositories → Create repository
+   ##### Repository name: nodejs
+   ##### Keep everything default and click: Create repository
    
 ### Attach IAM Role to EC2(k8s)
   - Step-by-step:
