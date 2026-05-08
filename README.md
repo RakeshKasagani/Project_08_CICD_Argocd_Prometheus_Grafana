@@ -120,15 +120,12 @@ sudo docker run -itd --name sonar -p 9000:9000 sonarqube
 ## Install Trivy (Security Scanner)
 ```
 wget https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-64bit.tar.gz
-
-              tar -xzf trivy_0.70.0_Linux-64bit.tar.gz
-
-              mv trivy /usr/local/bin/
-
-              chmod +x /usr/local/bin/trivy
+tar -xzf trivy_0.70.0_Linux-64bit.tar.gz
+mv trivy /usr/local/bin/
+chmod +x /usr/local/bin/trivy
 
 # Verify Trivy
-              trivy --version
+trivy --version
 ```
  ### Verify
   ```
