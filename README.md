@@ -713,9 +713,33 @@ Add credentials in **Manage Jenkins > Manage Credentials > System > Global crede
 #### On EC2 (not Jenkins UI):
 ```
 sudo usermod -aG docker jenkins
+```
+```
 sudo systemctl restart docker
+```
+```
 sudo chmod 666 /var/run/docker.sock
 ```
+```
+sudo systemctl restart jenkins
+```
+### Attach IAM Role to EC2(jenkins)
+  - Step-by-step:
+  - Open EC2 → Instances
+  - Select your instance
+  - Click Actions → Security → Modify IAM Role
+  - Attach a role with permissions:
+       - AmazonEC2ContainerRegistryFullAccess
+       - AmazonEKSClusterPolicy
+       - AmazonEC2FullAccess
+       - CloudFormationFullAccess
+       - IAMFullAccess
+### Create from AWS Console (jenkins)
+   #### Go to:
+           - AWS Console → Elastic Container Registry (ECR) → Repositories → Create repository
+   #### Repository name: nodejs
+   #### Keep everything default and click: Create repository
+   
 ### Attach IAM Role to EC2(k8s)
   - Step-by-step:
   - Open EC2 → Instances
