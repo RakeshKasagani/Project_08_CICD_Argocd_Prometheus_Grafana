@@ -743,6 +743,20 @@ sudo systemctl restart jenkins
    ##### Go to: AWS Console → Elastic Container Registry (ECR) → Repositories → Create repository
    ##### Repository name: nodejs
    ##### Keep everything default and click: Create repository
+## OR
+### Create Using AWS CLI
+  ##### Run this on Jenkins server:
+  ```
+ aws ecr create-repository --repository-name nodejs --region us-east-1
+```
+ ##### Expected output:
+ ```json
+{
+  "repository": {
+      ...
+  }
+}
+```
    
 ### Attach IAM Role to EC2(k8s)
   - Step-by-step:
