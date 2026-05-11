@@ -736,6 +736,7 @@ sudo systemctl restart jenkins
   - Select your instance
   - Click Actions → Security → Modify IAM Role
   - Attach a role with permissions:
+       - AmazonEKSClusterPolicy
        - AmazonEC2ContainerRegistryFullAccess
        - AmazonEKSClusterPolicy
        - AmazonEC2FullAccess
