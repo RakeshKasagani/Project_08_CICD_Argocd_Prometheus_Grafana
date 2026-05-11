@@ -87,7 +87,7 @@ stage('Push image to ECR') {
                     
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
 
-                    git push https://${githubtoken}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                    git push https://${githubtoken}@github.com/RakeshKasagani/Project_08_CICD_Argocd_Prometheus_Grafana.git HEAD:main
                 '''
 				  
                  }
