@@ -754,7 +754,7 @@ sudo systemctl restart jenkins
 ### Create Using AWS CLI
   ##### Run this on Jenkins server:
   ```
- aws ecr create-repository --repository-name nodejs --region us-east-1
+ aws ecr create-repository --repository-name myapp --region us-east-1
 ```
  ##### Expected output:
  ```json
