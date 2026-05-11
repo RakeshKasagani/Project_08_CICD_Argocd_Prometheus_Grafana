@@ -171,16 +171,18 @@ resource "aws_instance" "jenkins_server" {
 
   user_data = <<-EOF
               #!/bin/bash
+                yum update -y
 
-              yum update -y
-              yum install -y git docker wget curl unzip tar
+              sudo yum install git -y
+  
+              # Install Docker
 
-              # Start Docker
-              systemctl start docker
-              systemctl enable docker
-
-              # Add users to Docker group
-              usermod -aG docker ec2-user
+              echo ">>> Installing Docker..."
+              sudo yum install -y docker
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker $USER
+            
 
               # Jenkins Installation
               wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
