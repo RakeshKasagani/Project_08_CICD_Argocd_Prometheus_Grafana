@@ -181,7 +181,7 @@ resource "aws_instance" "jenkins_server" {
               sudo yum install -y docker
               sudo systemctl start docker
               sudo systemctl enable docker
-              sudo usermod -aG docker $USER
+              sudo usermod -aG docker ec2-user
             
 
               # Jenkins Installation
