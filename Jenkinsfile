@@ -59,8 +59,8 @@ stage('Push image to ECR') {
                   aws ecr get-login-password --region us-east-1 \
                   | docker login --username AWS --password-stdin 436735645837.dkr.ecr.us-east-1.amazonaws.com
                   
-                   docker tag rakesh/nodejs:${BUILD_NUMBER} 436735645837.dkr.ecr.us-east-1.amazonaws.com/myapp1:${BUILD_NUMBER}
-                   docker push 436735645837.dkr.ecr.us-east-1.amazonaws.com/myapp1:${BUILD_NUMBER}
+                   docker tag rakesh/nodejs:${BUILD_NUMBER} 436735645837.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
+                   docker push 436735645837.dkr.ecr.us-east-1.amazonaws.com/nodejs:${BUILD_NUMBER}
                 '''
             }
         }
@@ -82,7 +82,7 @@ stage('Push image to ECR') {
                     git config user.name "rakesh"
                     BUILD_NUMBER=${BUILD_NUMBER}
                    #sed -i "s/mc:.*/mc:${BUILD_NUMBER}/g" deploymentfiles/deployment.yml
-					sed -i "s|image: .*|image: 526344317172.dkr.ecr.us-east-1.amazonaws.com/nodejs:$BUILD_NUMBER|" deploymentfiles/deployment.yml
+					sed -i "s|image: .*|image: 436735645837.dkr.ecr.us-east-1.amazonaws.com/nodejs:$BUILD_NUMBER|" deploymentfiles/deployment.yml
                     git add .
                     
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
