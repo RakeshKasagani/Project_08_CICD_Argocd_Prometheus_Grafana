@@ -921,15 +921,15 @@ Run again:
 type main.tf
 ```
 
-#### This is main.tf file with vpc and ec2
+# This is main.tf file with vpc and ec2
 
 provider "aws" {
   region = "us-east-1"
 }
 
-# ----------------------------
-# VPC
-# ----------------------------
+## ----------------------------
+## VPC
+## ----------------------------
 resource "aws_vpc" "main_vpc" {
   cidr_block = "10.0.0.0/16"
 
@@ -938,9 +938,9 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
-# ----------------------------
-# Internet Gateway
-# ----------------------------
+## ----------------------------
+## Internet Gateway
+## ----------------------------
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main_vpc.id
 
@@ -949,9 +949,9 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# ----------------------------
-# Subnets
-# ----------------------------
+## ----------------------------
+## Subnets
+## ----------------------------
 resource "aws_subnet" "subnet1" {
   vpc_id                  = aws_vpc.main_vpc.id
   cidr_block              = "10.0.1.0/24"
@@ -974,9 +974,9 @@ resource "aws_subnet" "subnet2" {
   }
 }
 
-# ----------------------------
-# Route Table
-# ----------------------------
+## ----------------------------
+## Route Table
+## ----------------------------
 resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.main_vpc.id
 
@@ -1002,17 +1002,17 @@ resource "aws_route_table_association" "a2" {
   route_table_id = aws_route_table.rt.id
 }
 
-# ----------------------------
-# Key Pair
-# ----------------------------
+## ----------------------------
+## Key Pair
+## ----------------------------
 resource "aws_key_pair" "mykey" {
   key_name   = "project-new"
   public_key = file("C:/Users/Hp/.ssh/id_ed25519.pub")
 }
 
-# ----------------------------
-# Security Group
-# ----------------------------
+## ----------------------------
+## Security Group
+## ----------------------------
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2_sg"
   description = "Allow SSH and DevOps tools"
@@ -1078,9 +1078,9 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
-# ----------------------------
-# Instance 1: Jenkins Server
-# ----------------------------
+## ----------------------------
+## Instance 1: Jenkins Server
+## ----------------------------
 resource "aws_instance" "jenkins_server" {
   ami                         = "ami-08982f1c5bf93d976"
   instance_type               = "t2.large"
@@ -1155,9 +1155,9 @@ resource "aws_instance" "jenkins_server" {
   }
 }
 
-# ----------------------------
-# Instance 2: K8s Server
-# ----------------------------
+## ----------------------------
+## Instance 2: K8s Server
+## ----------------------------
 resource "aws_instance" "k8s_server" {
   ami                         = "ami-08982f1c5bf93d976"
   instance_type               = "t2.xlarge"
